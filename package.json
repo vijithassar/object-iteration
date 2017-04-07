@@ -12,7 +12,7 @@
     "dev": "rollup --config --watch",
     "test": "mocha",
     "pretest": "npm run build",
-    "lint": "eslint --config eslintrc.json source && eslint --config eslint.json test"
+    "lint": "eslint --config eslintrc.json source && eslint --config eslintrc.json test"
   },
   "keywords": [
     "hashmaps",

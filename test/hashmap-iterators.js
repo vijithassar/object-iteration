@@ -26,7 +26,6 @@ describe('iterable hashmap', function() {
         };
         let end = o(start);
         Object.keys(start).forEach(function(key) {
-            let value = start[key];
             assert.equal(end[key], start[key]);
         });
     });
@@ -50,7 +49,6 @@ describe('iterable hashmap', function() {
     });
     it('declares iteration methods as non-enumerable', function() {
         let item = o({test: true});
-        let item_properties = Object.getOwnPropertyNames(item);
         iteration_methods.forEach(function(method) {
             assert(item.propertyIsEnumerable(method) === false);
         });
@@ -82,14 +80,14 @@ describe('sorting', function() {
             return a < b;
         });
         let first = '';
-        item.forEach(function(value, key) {
+        item.forEach(function(value) {
             first += value;
         });
         item.sort(function(a, b) {
             return a > b;
         });
         let second = '';
-        item.forEach(function(value, key) {
+        item.forEach(function(value) {
             second += value;
         });
         assert.notEqual(first, second);
