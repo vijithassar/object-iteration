@@ -11,7 +11,7 @@ hashmap_iterators = function(pairs) {
     
     instance = function() {
       
-        var hash,
+        var hashmap,
             keys,
             sort,
             comparator,
@@ -25,7 +25,7 @@ hashmap_iterators = function(pairs) {
             some,
             every;
   
-        hash = {};
+        hashmap = {};
         comparator = lexicographic;
       
         if (pairs) {
@@ -38,7 +38,7 @@ hashmap_iterators = function(pairs) {
         if (pairs) {
             for (var key in pairs) {
                 if (pairs.hasOwnProperty(key)) {
-                    hash[key] = pairs[key];
+                    hashmap[key] = pairs[key];
                 }
             }
         }
@@ -62,7 +62,7 @@ hashmap_iterators = function(pairs) {
                 }
             }
         };
-        Object.defineProperty(hash, 'indexOf', {value: indexOf});
+        Object.defineProperty(hashmap, 'indexOf', {value: indexOf});
         
         lastIndexOf = function(target) {
             var result;
@@ -76,7 +76,7 @@ hashmap_iterators = function(pairs) {
                 }
             }
         };
-        Object.defineProperty(hash, 'lastIndexOf', {value: lastIndexOf});
+        Object.defineProperty(hashmap, 'lastIndexOf', {value: lastIndexOf});
       
         forEach = function(callback) {
             order.forEach(function(key) {
@@ -85,7 +85,7 @@ hashmap_iterators = function(pairs) {
                 callback(value, key);
             })
         }
-        Object.defineProperty(hash, 'forEach', {value: forEach});
+        Object.defineProperty(hashmap, 'forEach', {value: forEach});
       
         map = function(callback) {
             var result;
@@ -97,7 +97,7 @@ hashmap_iterators = function(pairs) {
             });
             return result;
         }
-        Object.defineProperty(hash, 'map', {value: map});
+        Object.defineProperty(hashmap, 'map', {value: map});
         
         filter = function(callback) {
             var result;
@@ -111,7 +111,7 @@ hashmap_iterators = function(pairs) {
             })
             return result;
         };
-        Object.defineProperty(hash, 'filter', {value: filter});
+        Object.defineProperty(hashmap, 'filter', {value: filter});
         
         some = function(callback) {
             var result;
@@ -125,7 +125,7 @@ hashmap_iterators = function(pairs) {
             });
             return result;
         }
-        Object.defineProperty(hash, 'some', {value: some});
+        Object.defineProperty(hashmap, 'some', {value: some});
         
         every = function(callback) {
             var result;
@@ -139,9 +139,9 @@ hashmap_iterators = function(pairs) {
             });
             return result;
         }
-        Object.defineProperty(hash, 'every', {value: every});
+        Object.defineProperty(hashmap, 'every', {value: every});
         
-        return hash;
+        return hashmap;
         
     }
     
