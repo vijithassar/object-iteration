@@ -4,13 +4,11 @@ reimplementing JavaScript's [ES5 array methods](https://developer.mozilla.org/en
 
 ## Quick Start
 
-**TL;DR**: Pass objects through the function to extend with useful methods inspired by arrays. These new object iteration methods are exactly the same as the ES5 array methods, but every callback takes `value` and `key` as parameters (so, string `key` instead of integer `index`). Default iteration order is lexicographic, or you can provide your own sort comparison function.
+**TL;DR**: Pass objects through the function to extend with useful methods inspired by arrays. These new object iteration methods are exactly the same as the ES5 array methods, but every callback takes `value` and `key` as parameters (so, a string for `key` instead of an integer for `index`). The default iteration order is lexicographic, or you can provide your own sort comparison function.
 
 ## Overview
 
-The ES5 array iteration methods are wonderful and powerful, but they only work for arrays; hashmaps are out of luck. JavaScript makes no promises about the order when you iterate across the properties of an object, and it's hard to get meaningful behavior out of concepts like `forEach` and `reduce` when you do not have a stable order.
-
-This tool adds a small and largely invisible wrapper to your plain JavaScript objects which enforces a stable iteration order, and then uses that order to build equivalents for all your favorite array methods, like `map`, `filter`, and `reduce`.
+The ES5 array iteration methods are wonderful and powerful, but they only work for arrays; hashmaps are out of luck. JavaScript makes no promises about the order when you iterate across the properties of an object, and it's hard to get meaningful behavior out of concepts like `forEach` and `reduce` when you do not have a stable order. This tool adds a small and largely invisible wrapper to your plain JavaScript objects which enforces a stable iteration order, and then uses that stable order to build equivalents for all your favorite array methods, like `map`, `filter`, and `reduce`.
 
 ## Why
 
@@ -103,7 +101,7 @@ let pairs = o({
     vegetable: 'carrot',
     mineral: 'diamond'
 });
-// always alphabetical by default
+// lexicographic sort by default
 pairs.forEach(function(value, key) {
     console.log(key + ':' + value)
 });
@@ -143,11 +141,11 @@ prints:
 
 All ES5 array iteration methods are reimplemented:
 
-- `forEach` iterates across the object
+- `forEach` iterates across the object and runs a callback function on each item
 - `map` returns a new object with the values transformed by the callback function
 - `filter` returns a new object containing only key/value pairs in which the predicate function returns true
-- `reduce` reduces an object to a single value
-- `reduceRight` reduces object to a single value, iterating in reverse order
+- `reduce` reduces an object to a single value with an accumulator function
+- `reduceRight` reduces an object to a single value with an accumulator function, iterating in reverse order
 
 The parameters taken by the callback functions (or accumulator functions, in the case of `reduce` and `reduceRight`) are exactly the same, except that the string `key` is substituted for the integer `index` (usually this is the second parameter).
 
@@ -156,7 +154,7 @@ The parameters taken by the callback functions (or accumulator functions, in the
 Index lookup methods like `indexOf` and `lastIndexOf` don't mean anything when the iteration order is unstable, but they *do* have meaning once the keys have a consistent order, so they are reimplemented:
 
 ```javascript
-// with default lexicographic search
+// lexicographic sort by default
 let pairs = o({
     animal: 'dog',
     vegetable: 'carrot',
