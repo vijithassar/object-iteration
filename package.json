@@ -1,0 +1,28 @@
+{
+  "name": "hashmap-iterators",
+  "version": "0.5.0",
+  "description": "hashmap iteration methods implemented in the style of the ES5 array methods",
+  "main": "build/hashmap-iterators.js",
+  "module": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "rollup --config",
+    "dev": "rollup --config --watch",
+    "test": "mocha",
+    "pretest": "npm run build",
+    "lint": "eslint --config eslintrc.json source && eslint --config eslint.json test"
+  },
+  "keywords": [
+    "hashmaps",
+    "data",
+    "structures"
+  ],
+  "author": "Vijith Assar",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "rollup": "^0.41.6"
+  }
+}
