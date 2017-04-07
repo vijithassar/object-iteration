@@ -29,7 +29,7 @@ describe('iterable hashmap', function() {
             assert.equal(end[key], start[key]);
         });
     });
-    let iteration_methods = [
+    let methods = [
         'sort',
         'indexOf',
         'lastIndexOf',
@@ -40,16 +40,16 @@ describe('iterable hashmap', function() {
         'reduce',
         'reduceRight'
     ];
-    it('has iteration methods', function() {
+    it('has methods', function() {
         let item = o({test: true});
         let item_properties = Object.getOwnPropertyNames(item);
-        iteration_methods.forEach(function(method) {
+        methods.forEach(function(method) {
             assert(item_properties.indexOf(method));
         });
     });
-    it('declares iteration methods as non-enumerable', function() {
+    it('declares methods as non-enumerable', function() {
         let item = o({test: true});
-        iteration_methods.forEach(function(method) {
+        methods.forEach(function(method) {
             assert(item.propertyIsEnumerable(method) === false);
         });
     });
