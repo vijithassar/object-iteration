@@ -1,6 +1,13 @@
 let o = require('../build/object-iteration.js');
 let assert = require('assert');
 
+let compress = function(previous, value, key) {
+    if (typeof previous === 'undefined') {
+        previous = '';
+    }
+    return previous + key + value;
+};
+
 describe('factory', function() {
     it('is a function', function() {
         assert.equal(typeof o, 'function');
@@ -63,37 +70,25 @@ describe('sorting', function() {
             b: 2,
             d: 4
         }).sort();
-        let result = '';
-        item.forEach(function(value) {
-            result += value;
-        });
-        assert.equal(result, '1234');
+        let result = item.reduce(compress);
+        assert.equal(result, 'a1b2c3d4');
     });
     it('accepts a comparator function', function() {
         let item = o({
             a: '1',
-            b: '2',
-            y: '3',
-            z: '4'
+            b: '2'
         })
         .sort(function(a, b) {
             return a < b;
         });
-        let first = '';
-        item.forEach(function(value) {
-            first += value;
-        });
+        let first = item.reduce(compress);
         item.sort(function(a, b) {
             return a > b;
         });
-        let second = '';
-        item.forEach(function(value) {
-            second += value;
-        });
+        let second = item.reduce(compress);
         assert.notEqual(first, second);
     });
     it('is independent for each instance', function() {
-        let first_result = '';
         let first = o({
             a: 1,
             b: 2
@@ -101,11 +96,7 @@ describe('sorting', function() {
         .sort(function(a, b) {
             return a > b;
         });
-        first
-            .forEach(function(value) {
-                first_result += value;
-            });
-        let second_result = '';
+        let first_result = first.reduce(compress);
         let second = o({
             a: 1,
             b: 2
@@ -113,11 +104,19 @@ describe('sorting', function() {
         .sort(function(a, b) {
             return a < b;
         });
-        second
-            .forEach(function(value) {
-                second_result += value;
-            });
+        let second_result = second.reduce(compress);
         assert(first_result !== second_result);
+    });
+    it('can be chained', function() {
+        let item = o({x: 1, y: 2, z: 3})
+            .filter(function(value, key) {
+                return key !== 'y';
+            })
+            .map(function(value) {
+                return value + 1;
+            });
+        let result = item.reduce(compress);
+        assert.equal(result, 'x2z4');
     });
 });
 
@@ -170,12 +169,8 @@ describe('array method analogues', function() {
             let end = start.map(function(value) {
                 return value + value;
             });
-            let test = o(end);
-            let result = '';
-            test.forEach(function(value) {
-                result += value;
-            });
-            assert.equal(result, 'yyzz');
+            let result = end.reduce(compress);
+            assert.equal(result, 'ayybzz');
         });
     });
 
@@ -203,20 +198,16 @@ describe('array method analogues', function() {
     describe('reduce', function() {
         it('reduces to a single value', function() {
             let item = o({a: 1, b: 2});
-            let result = item.reduce(function(previous, value, key) {
-                return previous + key + value;
-            }, '0');
-            assert.equal(result, '0a1b2');
+            let result = item.reduce(compress, 'z');
+            assert.equal(result, 'za1b2');
         });
     });
 
     describe('reduceRight', function() {
         it('reduces to a single value in reverse order', function() {
             let item = o({a: 1, b: 2});
-            let result = item.reduceRight(function(previous, value, key) {
-                return previous + key + value;
-            }, '0');
-            assert.equal(result, '0b2a1');
+            let result = item.reduceRight(compress, 'z');
+            assert.equal(result, 'zb2a1');
         });
     });
 
@@ -225,17 +216,14 @@ describe('array method analogues', function() {
 describe('syntax', function() {
     it('allows fluent chaining', function() {
         let item = o({a: 1, b: 2, c: 3, d: 4});
-        let result = '';
-        item
+        let result = item
             .filter(function(value) {
                 return value % 2 === 0;
             })
             .map(function(value) {
                 return value + 1;
             })
-            .forEach(function(value, key) {
-                result += key + value;
-            });
+            .reduce(compress);
         assert.equal(result, 'b3d5');
     });
 });
