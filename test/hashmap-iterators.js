@@ -139,3 +139,61 @@ describe('indices', function() {
         assert(item.lastIndexOf('apple') === 'c');
     });
 });
+
+describe('some', function() {
+    it('finds matches', function() {
+        let first = o({test: true});
+        let first_test = first.some(value => value === true);
+        assert.equal(first_test, true);
+        let second = o({test: true});
+        let second_test = second.some(value => value === false);
+        assert.equal(second_test, false);
+    });
+});
+
+describe('every', function() {
+    it('finds all matches', function() {
+        let first = o({a: 'apple', b: 'apple'});
+        let first_test = first.every(value => value === 'apple');
+        assert.equal(first_test, true);
+        let second = o({a: 'apple', b: 'banana'});
+        let second_test = second.every(value => value === 'apple');
+        assert.equal(second_test, false);
+    });
+});
+
+describe('map', function() {
+    it('transforms the input', function() {
+        let start = o({a: 'y', b: 'z'});
+        let end = start.map(function(value) {
+            return value + value;
+        });
+        let test = o(end);
+        let result = '';
+        test.forEach(function(value) {
+            result += value;
+        });
+        assert.equal(result, 'yyzz');
+    });
+});
+
+describe('filter', function() {
+    it('removes items', function() {
+        let start = o({a: 'y', b: 'z'});
+        let end = start.filter(function(value) {
+            return value !== 'z';
+        });
+        assert.equal(Object.keys(end).length, 1);
+    });
+});
+
+describe('forEach', function() {
+    it('iterates across all items', function() {
+        let item = o({a: 'y', b: 'z'});
+        let result = '';
+        item.forEach(function(value, key) {
+            result += value + key;
+        });
+        assert.equal(result, 'yazb');
+    });
+});
