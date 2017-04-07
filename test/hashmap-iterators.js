@@ -6,11 +6,11 @@ describe('factory', function() {
         assert.equal(typeof o, 'function');
     });
     it('returns an object', function() {
-        let instance = o({
+        let item = o({
             a: 1,
             b: 2
         });
-        assert.equal(typeof instance, 'object');
+        assert.equal(typeof item, 'object');
     });
 });
 
