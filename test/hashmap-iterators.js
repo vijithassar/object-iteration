@@ -16,8 +16,8 @@ describe('factory', function() {
 
 describe('iterable hashmap', function() {
     it('is an object', function() {
-        let i = o({test: true});
-        assert.equal(typeof i, 'object');
+        let item = o({test: true});
+        assert.equal(typeof item, 'object');
     });
     it('preserves original data', function() {
         let start = {
@@ -28,6 +28,31 @@ describe('iterable hashmap', function() {
         Object.keys(start).forEach(function(key) {
             let value = start[key];
             assert.equal(end[key], start[key]);
+        });
+    });
+    let iteration_methods = [
+        'sort',
+        'indexOf',
+        'lastIndexOf',
+        'some',
+        'every',
+        'map',
+        'filter',
+        'reduce',
+        'reduceRight'
+    ];
+    it('has iteration methods', function() {
+        let item = o({test: true});
+        let item_properties = Object.getOwnPropertyNames(item);
+        iteration_methods.forEach(function(method) {
+            assert(item_properties.indexOf(method));
+        });
+    });
+    it('declares iteration methods as non-enumerable', function() {
+        let item = o({test: true});
+        let item_properties = Object.getOwnPropertyNames(item);
+        iteration_methods.forEach(function(method) {
+            assert(item.propertyIsEnumerable(method) === false);
         });
     });
 });
