@@ -119,7 +119,7 @@ describe('sorting', function() {
                 return value + 1;
             })
             .reduce(compress);
-        assert.equal(result, 'x2z4');
+        assert.equal(result, 'z4x2');
     });
 });
 
