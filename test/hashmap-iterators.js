@@ -56,3 +56,19 @@ describe('iterable hashmap', function() {
         });
     });
 });
+
+describe('sorting', function() {
+    it('defaults to lexicographic', function() {
+        let item = o({
+            a: 1,
+            c: 3,
+            b: 2,
+            d: 4
+        }).sort();
+        let result = '';
+        item.forEach(function(value) {
+            result += value;
+        });
+        assert.equal(result, '1234')
+    });
+});

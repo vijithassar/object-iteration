@@ -48,7 +48,9 @@ hashmap_iterators = function(pairs) {
                 comparator = new_comparator;
                 order.sort(comparator);
             }
+            return hashmap;
         };
+        Object.defineProperty(hashmap, 'sort', {value: sort});
         
         indexOf = function(target) {
             var result;
