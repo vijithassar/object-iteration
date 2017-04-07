@@ -105,17 +105,20 @@ describe('sorting', function() {
             return a < b;
         });
         let second_result = second.reduce(compress);
-        assert(first_result !== second_result);
+        assert.notEqual(first_result, second_result);
     });
     it('can be chained', function() {
-        let item = o({x: 1, y: 2, z: 3})
+        let item = o({x: 1, y: 2, z: 3}).sort(function(a, b) {
+            return a > b;
+        });
+        let result = item
             .filter(function(value, key) {
                 return key !== 'y';
             })
             .map(function(value) {
                 return value + 1;
-            });
-        let result = item.reduce(compress);
+            })
+            .reduce(compress);
         assert.equal(result, 'x2z4');
     });
 });

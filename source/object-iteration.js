@@ -161,8 +161,8 @@ object_iteration = function(pairs) {
         sort = function(new_comparator) {
             if (typeof new_comparator === 'function') {
                 comparator = new_comparator;
-                order.sort(comparator);
             }
+            order.sort(comparator);
             return object;
         };
         Object.defineProperty(object, 'sort', {value: sort});
