@@ -120,3 +120,22 @@ describe('sorting', function() {
         assert(first_result !== second_result);
     });
 });
+
+describe('indices', function() {
+    it('finds the first index with indexOf', function() {
+        let item = o({
+            a: 'apple',
+            b: 'pear',
+            c: 'apple'
+        }).sort();
+        assert(item.indexOf('apple') === 'a');
+    });
+    it('finds the last index with lastIndexOf', function() {
+        let item = o({
+            a: 'apple',
+            b: 'pear',
+            c: 'apple'
+        }).sort();
+        assert(item.lastIndexOf('apple') === 'c');
+    });
+});
