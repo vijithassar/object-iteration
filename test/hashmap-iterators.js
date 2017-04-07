@@ -40,14 +40,14 @@ describe('iterable hashmap', function() {
         'reduce',
         'reduceRight'
     ];
-    it('has methods', function() {
+    it('has additional methods', function() {
         let item = o({test: true});
         let item_properties = Object.getOwnPropertyNames(item);
         methods.forEach(function(method) {
             assert(item_properties.indexOf(method));
         });
     });
-    it('declares methods as non-enumerable', function() {
+    it('declares additional methods as non-enumerable', function() {
         let item = o({test: true});
         methods.forEach(function(method) {
             assert(item.propertyIsEnumerable(method) === false);
