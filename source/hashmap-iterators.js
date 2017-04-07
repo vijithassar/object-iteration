@@ -1,22 +1,22 @@
 var lexicographic,
     hashmap_iterators;
 
-lexicographic = function(a, b)  {
-  return a > b;
-}
+lexicographic = function(a, b) {
+    return a > b;
+};
 
 hashmap_iterators = function(pairs) {
-  
+
     var instance;
-    
+
     instance = function() {
-      
+
         var hashmap,
             keys,
+            key,
             sort,
             comparator,
             order,
-            internal_configuration,
             indexOf,
             lastIndexOf,
             forEach,
@@ -24,19 +24,19 @@ hashmap_iterators = function(pairs) {
             filter,
             some,
             every;
-  
+
         hashmap = {};
         comparator = lexicographic;
-      
+
         if (pairs) {
             keys = Object.keys(pairs);
         } else {
             keys = [];
         }
         order = keys.sort(comparator);
-        
+
         if (pairs) {
-            for (var key in pairs) {
+            for (key in pairs) {
                 if (pairs.hasOwnProperty(key)) {
                     hashmap[key] = pairs[key];
                 }
@@ -51,12 +51,12 @@ hashmap_iterators = function(pairs) {
             return hashmap;
         };
         Object.defineProperty(hashmap, 'sort', {value: sort});
-        
+
         indexOf = function(target) {
-            var result;
-            for (var i = 0; i < order.length; i++) {
-                var key,
-                    value;
+            var key,
+                value,
+                i;
+            for (i = 0; i < order.length; i++) {
                 key = order[i];
                 value = pairs[key];
                 if (target === value) {
@@ -65,12 +65,12 @@ hashmap_iterators = function(pairs) {
             }
         };
         Object.defineProperty(hashmap, 'indexOf', {value: indexOf});
-        
+
         lastIndexOf = function(target) {
-            var result;
-            for (var i = order.length; i > -1; i--) {
-                var key,
-                    value;
+            var key,
+                value,
+                i;
+            for (i = order.length; i > -1; i--) {
                 key = order[i];
                 value = pairs[key];
                 if (target === value) {
@@ -79,42 +79,42 @@ hashmap_iterators = function(pairs) {
             }
         };
         Object.defineProperty(hashmap, 'lastIndexOf', {value: lastIndexOf});
-      
+
         forEach = function(callback) {
             order.forEach(function(key) {
                 var value;
                 value = pairs[key];
                 callback(value, key);
-            })
-        }
+            });
+        };
         Object.defineProperty(hashmap, 'forEach', {value: forEach});
-      
+
         map = function(callback) {
             var result;
-            result = better_hash(internal_configuration);
+            result = {};
             order.forEach(function(key) {
                 var value;
                 value = pairs[key];
                 result[key] = callback(value, key);
             });
             return result;
-        }
+        };
         Object.defineProperty(hashmap, 'map', {value: map});
-        
+
         filter = function(callback) {
             var result;
-            result = better_hash(internal_configuration);
+            result = {};
             order.forEach(function(key) {
                 var value;
                 value = pairs[key];
                 if (callback(value, key)) {
                     result[key] = value;
                 }
-            })
+            });
             return result;
         };
         Object.defineProperty(hashmap, 'filter', {value: filter});
-        
+
         some = function(callback) {
             var result;
             result = false;
@@ -126,9 +126,9 @@ hashmap_iterators = function(pairs) {
                 }
             });
             return result;
-        }
+        };
         Object.defineProperty(hashmap, 'some', {value: some});
-        
+
         every = function(callback) {
             var result;
             result = true;
@@ -140,13 +140,13 @@ hashmap_iterators = function(pairs) {
                 }
             });
             return result;
-        }
+        };
         Object.defineProperty(hashmap, 'every', {value: every});
-        
+
         return hashmap;
-        
-    }
-    
+
+    };
+
     return instance();
 
 };

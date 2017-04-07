@@ -43,6 +43,7 @@
         "no-console": ["error", { "allow": ["warn", "error"] }],
         "no-debugger": "error",
         "no-use-before-define": "error",
+        "semi": ["error", "always"],
         "array-callback-return": "error",
         "curly": ["error", "all"],
         "no-eval": "error",
