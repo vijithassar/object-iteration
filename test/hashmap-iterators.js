@@ -93,22 +93,30 @@ describe('sorting', function() {
         assert.notEqual(first, second);
     });
     it('is independent for each instance', function() {
+        let first_result = '';
         let first = o({
             a: 1,
             b: 2
         })
         .sort(function(a, b) {
             return a > b;
-        })
-        .join('');
+        });
+        first
+            .forEach(function(value) {
+                first_result += value;
+            });
+        let second_result = '';
         let second = o({
             a: 1,
             b: 2
         })
         .sort(function(a, b) {
             return a < b;
-        })
-        .join('');
-        assert(first !== second);
+        });
+        second
+            .forEach(function(value) {
+                second_result += value;
+            });
+        assert(first_result !== second_result);
     });
 });
