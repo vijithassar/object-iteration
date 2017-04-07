@@ -197,3 +197,23 @@ describe('forEach', function() {
         assert.equal(result, 'yazb');
     });
 });
+
+describe('reduce', function() {
+    it('reduces to a single value', function() {
+        let item = o({a: 1, b: 2});
+        let result = item.reduce(function(previous, value, key) {
+            return previous + key + value;
+        }, '0');
+        assert.equal(result, '0a1b2');
+    });
+});
+
+describe('reduceRight', function() {
+    it('reduces to a single value in reverse order', function() {
+        let item = o({a: 1, b: 2});
+        let result = item.reduceRight(function(previous, value, key) {
+            return previous + key + value;
+        }, '0');
+        assert.equal(result, '0b2a1');
+    });
+});

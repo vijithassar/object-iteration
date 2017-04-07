@@ -23,7 +23,9 @@ hashmap_iterators = function(pairs) {
             map,
             filter,
             some,
-            every;
+            every,
+            reduce,
+            reduceRight;
 
         hashmap = {};
         comparator = lexicographic;
@@ -142,6 +144,29 @@ hashmap_iterators = function(pairs) {
             return result;
         };
         Object.defineProperty(hashmap, 'every', {value: every});
+
+        reduce = function(accumulator, initial_value) {
+            var reduced;
+            reduced = order.reduce(function(previous_result, key) {
+                var value;
+                value = pairs[key];
+                return accumulator(previous_result, value, key);
+            }, initial_value);
+            return reduced;
+        };
+        Object.defineProperty(hashmap, 'reduce', {value: reduce});
+
+        reduceRight = function(accumulator, initial_value) {
+            var reduced;
+            reduced = order.reduceRight(function(previous_result, key) {
+                var value;
+                value = pairs[key];
+                return accumulator(previous_result, value, key);
+            }, initial_value);
+            return reduced;
+        };
+        Object.defineProperty(hashmap, 'reduceRight', {value: reduceRight});
+
 
         return hashmap;
 
