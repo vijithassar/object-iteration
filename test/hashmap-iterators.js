@@ -69,6 +69,48 @@ describe('sorting', function() {
         item.forEach(function(value) {
             result += value;
         });
-        assert.equal(result, '1234')
+        assert.equal(result, '1234');
+    });
+    it('accepts a comparator function', function() {
+        let item = o({
+            a: '1',
+            b: '2',
+            y: '3',
+            z: '4'
+        })
+        .sort(function(a, b) {
+            return a < b;
+        });
+        let first = '';
+        item.forEach(function(value, key) {
+            first += value;
+        });
+        item.sort(function(a, b) {
+            return a > b;
+        });
+        let second = '';
+        item.forEach(function(value, key) {
+            second += value;
+        });
+        assert.notEqual(first, second);
+    });
+    it('is independent for each instance', function() {
+        let first = o({
+            a: 1,
+            b: 2
+        })
+        .sort(function(a, b) {
+            return a > b;
+        })
+        .join('');
+        let second = o({
+            a: 1,
+            b: 2
+        })
+        .sort(function(a, b) {
+            return a < b;
+        })
+        .join('');
+        assert(first !== second);
     });
 });
