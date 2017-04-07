@@ -99,7 +99,7 @@ hashmap_iterators = function(pairs) {
                 value = pairs[key];
                 result[key] = callback(value, key);
             });
-            return result;
+            return hashmap_iterators(result);
         };
         Object.defineProperty(hashmap, 'map', {value: map});
 
@@ -113,7 +113,7 @@ hashmap_iterators = function(pairs) {
                     result[key] = value;
                 }
             });
-            return result;
+            return hashmap_iterators(result);
         };
         Object.defineProperty(hashmap, 'filter', {value: filter});
 

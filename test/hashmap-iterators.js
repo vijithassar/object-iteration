@@ -140,80 +140,102 @@ describe('indices', function() {
     });
 });
 
-describe('some', function() {
-    it('finds matches', function() {
-        let first = o({test: true});
-        let first_test = first.some(value => value === true);
-        assert.equal(first_test, true);
-        let second = o({test: true});
-        let second_test = second.some(value => value === false);
-        assert.equal(second_test, false);
-    });
-});
+describe('array method analogues', function() {
 
-describe('every', function() {
-    it('finds all matches', function() {
-        let first = o({a: 'apple', b: 'apple'});
-        let first_test = first.every(value => value === 'apple');
-        assert.equal(first_test, true);
-        let second = o({a: 'apple', b: 'banana'});
-        let second_test = second.every(value => value === 'apple');
-        assert.equal(second_test, false);
-    });
-});
-
-describe('map', function() {
-    it('transforms the input', function() {
-        let start = o({a: 'y', b: 'z'});
-        let end = start.map(function(value) {
-            return value + value;
+    describe('some', function() {
+        it('finds matches', function() {
+            let first = o({test: true});
+            let first_test = first.some(value => value === true);
+            assert.equal(first_test, true);
+            let second = o({test: true});
+            let second_test = second.some(value => value === false);
+            assert.equal(second_test, false);
         });
-        let test = o(end);
+    });
+
+    describe('every', function() {
+        it('finds all matches', function() {
+            let first = o({a: 'apple', b: 'apple'});
+            let first_test = first.every(value => value === 'apple');
+            assert.equal(first_test, true);
+            let second = o({a: 'apple', b: 'banana'});
+            let second_test = second.every(value => value === 'apple');
+            assert.equal(second_test, false);
+        });
+    });
+
+    describe('map', function() {
+        it('transforms the input', function() {
+            let start = o({a: 'y', b: 'z'});
+            let end = start.map(function(value) {
+                return value + value;
+            });
+            let test = o(end);
+            let result = '';
+            test.forEach(function(value) {
+                result += value;
+            });
+            assert.equal(result, 'yyzz');
+        });
+    });
+
+    describe('filter', function() {
+        it('removes items', function() {
+            let start = o({a: 'y', b: 'z'});
+            let end = start.filter(function(value) {
+                return value !== 'z';
+            });
+            assert.equal(Object.keys(end).length, 1);
+        });
+    });
+
+    describe('forEach', function() {
+        it('iterates across all items', function() {
+            let item = o({a: 'y', b: 'z'});
+            let result = '';
+            item.forEach(function(value, key) {
+                result += value + key;
+            });
+            assert.equal(result, 'yazb');
+        });
+    });
+
+    describe('reduce', function() {
+        it('reduces to a single value', function() {
+            let item = o({a: 1, b: 2});
+            let result = item.reduce(function(previous, value, key) {
+                return previous + key + value;
+            }, '0');
+            assert.equal(result, '0a1b2');
+        });
+    });
+
+    describe('reduceRight', function() {
+        it('reduces to a single value in reverse order', function() {
+            let item = o({a: 1, b: 2});
+            let result = item.reduceRight(function(previous, value, key) {
+                return previous + key + value;
+            }, '0');
+            assert.equal(result, '0b2a1');
+        });
+    });
+
+});
+
+describe('syntax', function() {
+    it('allows fluent chaining', function() {
+        let item = o({a: 1, b: 2, c: 3, d: 4});
         let result = '';
-        test.forEach(function(value) {
-            result += value;
-        });
-        assert.equal(result, 'yyzz');
-    });
-});
-
-describe('filter', function() {
-    it('removes items', function() {
-        let start = o({a: 'y', b: 'z'});
-        let end = start.filter(function(value) {
-            return value !== 'z';
-        });
-        assert.equal(Object.keys(end).length, 1);
-    });
-});
-
-describe('forEach', function() {
-    it('iterates across all items', function() {
-        let item = o({a: 'y', b: 'z'});
-        let result = '';
-        item.forEach(function(value, key) {
-            result += value + key;
-        });
-        assert.equal(result, 'yazb');
-    });
-});
-
-describe('reduce', function() {
-    it('reduces to a single value', function() {
-        let item = o({a: 1, b: 2});
-        let result = item.reduce(function(previous, value, key) {
-            return previous + key + value;
-        }, '0');
-        assert.equal(result, '0a1b2');
-    });
-});
-
-describe('reduceRight', function() {
-    it('reduces to a single value in reverse order', function() {
-        let item = o({a: 1, b: 2});
-        let result = item.reduceRight(function(previous, value, key) {
-            return previous + key + value;
-        }, '0');
-        assert.equal(result, '0b2a1');
+        item
+            .filter(function(value) {
+                return value % 2 === 0;
+            })
+            .map(function(value) {
+                return value + 1;
+            })
+            .forEach(function(value, key) {
+                result += key + value;
+            });
+        assert.equal(result, 'b3d5');
     });
 });
