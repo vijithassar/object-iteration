@@ -1,8 +1,8 @@
 {
-  "name": "hashmap-iterators",
-  "version": "0.5.0",
-  "description": "hashmap iteration methods implemented in the style of the ES5 array methods",
-  "main": "build/hashmap-iterators.js",
+  "name": "object-iteration",
+  "version": "0.1.0",
+  "description": "iteration methods for plain JavaScript objects implemented in the style of the ES5 array methods",
+  "main": "build/object-iteration.js",
   "module": "index.js",
   "directories": {
     "test": "test"

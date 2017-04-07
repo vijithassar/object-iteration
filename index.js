@@ -1,3 +1,3 @@
-import { hashmap_iterators } from './source/hashmap-iterators.js';
+import { object_iteration } from './source/object-iteration.js';
 
-export default hashmap_iterators
+export default object_iteration

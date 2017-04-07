@@ -1,9 +1,9 @@
 let config = {
     entry: './index.js',
-    dest: './build/hashmap-iterators.js',
+    dest: './build/object-iteration.js',
     format: 'umd',
     sourceMap: true,
-    moduleName: 'hashmap-iterators'
+    moduleName: 'object-iteration'
 }
 
 export default config

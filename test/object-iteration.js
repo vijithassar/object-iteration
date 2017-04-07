@@ -1,4 +1,4 @@
-let o = require('../build/hashmap-iterators.js');
+let o = require('../build/object-iteration.js');
 let assert = require('assert');
 
 describe('factory', function() {

@@ -1,17 +1,17 @@
 var lexicographic,
-    hashmap_iterators;
+    object_iteration;
 
 lexicographic = function(a, b) {
     return a > b;
 };
 
-hashmap_iterators = function(pairs) {
+object_iteration = function(pairs) {
 
     var instance;
 
     instance = function() {
 
-        var hashmap,
+        var object,
             keys,
             key,
             sort,
@@ -27,7 +27,7 @@ hashmap_iterators = function(pairs) {
             reduce,
             reduceRight;
 
-        hashmap = {};
+        object = {};
         comparator = lexicographic;
 
         if (pairs) {
@@ -40,7 +40,7 @@ hashmap_iterators = function(pairs) {
         if (pairs) {
             for (key in pairs) {
                 if (pairs.hasOwnProperty(key)) {
-                    hashmap[key] = pairs[key];
+                    object[key] = pairs[key];
                 }
             }
         }
@@ -50,9 +50,9 @@ hashmap_iterators = function(pairs) {
                 comparator = new_comparator;
                 order.sort(comparator);
             }
-            return hashmap;
+            return object;
         };
-        Object.defineProperty(hashmap, 'sort', {value: sort});
+        Object.defineProperty(object, 'sort', {value: sort});
 
         indexOf = function(target) {
             var key,
@@ -66,7 +66,7 @@ hashmap_iterators = function(pairs) {
                 }
             }
         };
-        Object.defineProperty(hashmap, 'indexOf', {value: indexOf});
+        Object.defineProperty(object, 'indexOf', {value: indexOf});
 
         lastIndexOf = function(target) {
             var key,
@@ -80,7 +80,7 @@ hashmap_iterators = function(pairs) {
                 }
             }
         };
-        Object.defineProperty(hashmap, 'lastIndexOf', {value: lastIndexOf});
+        Object.defineProperty(object, 'lastIndexOf', {value: lastIndexOf});
 
         forEach = function(callback) {
             order.forEach(function(key) {
@@ -89,7 +89,7 @@ hashmap_iterators = function(pairs) {
                 callback(value, key);
             });
         };
-        Object.defineProperty(hashmap, 'forEach', {value: forEach});
+        Object.defineProperty(object, 'forEach', {value: forEach});
 
         map = function(callback) {
             var result;
@@ -99,9 +99,9 @@ hashmap_iterators = function(pairs) {
                 value = pairs[key];
                 result[key] = callback(value, key);
             });
-            return hashmap_iterators(result);
+            return object_iteration(result);
         };
-        Object.defineProperty(hashmap, 'map', {value: map});
+        Object.defineProperty(object, 'map', {value: map});
 
         filter = function(callback) {
             var result;
@@ -113,9 +113,9 @@ hashmap_iterators = function(pairs) {
                     result[key] = value;
                 }
             });
-            return hashmap_iterators(result);
+            return object_iteration(result);
         };
-        Object.defineProperty(hashmap, 'filter', {value: filter});
+        Object.defineProperty(object, 'filter', {value: filter});
 
         some = function(callback) {
             var result;
@@ -129,7 +129,7 @@ hashmap_iterators = function(pairs) {
             });
             return result;
         };
-        Object.defineProperty(hashmap, 'some', {value: some});
+        Object.defineProperty(object, 'some', {value: some});
 
         every = function(callback) {
             var result;
@@ -143,7 +143,7 @@ hashmap_iterators = function(pairs) {
             });
             return result;
         };
-        Object.defineProperty(hashmap, 'every', {value: every});
+        Object.defineProperty(object, 'every', {value: every});
 
         reduce = function(accumulator, initial_value) {
             var reduced;
@@ -154,7 +154,7 @@ hashmap_iterators = function(pairs) {
             }, initial_value);
             return reduced;
         };
-        Object.defineProperty(hashmap, 'reduce', {value: reduce});
+        Object.defineProperty(object, 'reduce', {value: reduce});
 
         reduceRight = function(accumulator, initial_value) {
             var reduced;
@@ -165,10 +165,10 @@ hashmap_iterators = function(pairs) {
             }, initial_value);
             return reduced;
         };
-        Object.defineProperty(hashmap, 'reduceRight', {value: reduceRight});
+        Object.defineProperty(object, 'reduceRight', {value: reduceRight});
 
 
-        return hashmap;
+        return object;
 
     };
 
@@ -176,4 +176,4 @@ hashmap_iterators = function(pairs) {
 
 };
 
-export { hashmap_iterators };
+export { object_iteration };
