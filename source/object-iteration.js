@@ -130,6 +130,7 @@ object_iteration = function(pairs) {
             sort,
             comparator,
             order,
+            define,
             _indexOf,
             _lastIndexOf,
             _forEach,
@@ -140,8 +141,8 @@ object_iteration = function(pairs) {
             _reduce,
             _reduceRight;
 
-        object = {};
         comparator = lexicographic;
+        object = {};
 
         if (pairs) {
             keys = Object.keys(pairs);
@@ -158,59 +159,65 @@ object_iteration = function(pairs) {
             }
         }
 
+        _indexOf = function(target) {
+            return indexOf(target, pairs, order);
+        };
+
+        _lastIndexOf = function(target) {
+            return lastIndexOf(target, pairs, order);
+        };
+
+        _forEach = function(callback) {
+            forEach(callback, pairs, order);
+        };
+
+        _map = function(callback) {
+            return map(callback, pairs, order);
+        };
+
+        _filter = function(callback) {
+            return filter(callback, pairs, order);
+        };
+
+        _some = function(callback) {
+            return some(callback, pairs, order);
+        };
+
+        _every = function(callback) {
+            return every(callback, pairs, order);
+        };
+
+        _reduce = function(accumulator, initial_value) {
+            return reduce(accumulator, initial_value, pairs, order);
+        };
+
+        _reduceRight = function(accumulator, initial_value) {
+            return reduceRight(accumulator, initial_value, pairs, order);
+        };
+
         sort = function(new_comparator) {
             if (typeof new_comparator === 'function') {
                 comparator = new_comparator;
             }
             order.sort(comparator);
-            return object;
+            return define(object);
         };
-        Object.defineProperty(object, 'sort', {value: sort});
 
-        _indexOf = function(target) {
-            return indexOf(target, pairs, order);
+        define = function(target) {
+            Object.defineProperty(target, 'indexOf', {value: _indexOf});
+            Object.defineProperty(target, 'lastIndexOf', {value: _lastIndexOf});
+            Object.defineProperty(target, 'forEach', {value: _forEach});
+            Object.defineProperty(target, 'map', {value: _map});
+            Object.defineProperty(target, 'filter', {value: _filter});
+            Object.defineProperty(target, 'some', {value: _some});
+            Object.defineProperty(target, 'every', {value: _every});
+            Object.defineProperty(target, 'reduce', {value: _reduce});
+            Object.defineProperty(target, 'reduceRight', {value: _reduceRight});
+            Object.defineProperty(target, 'sort', {value: sort});
+            return target;
         };
-        Object.defineProperty(object, 'indexOf', {value: _indexOf});
 
-        _lastIndexOf = function(target) {
-            return lastIndexOf(target, pairs, order);
-        };
-        Object.defineProperty(object, 'lastIndexOf', {value: _lastIndexOf});
-
-        _forEach = function(callback) {
-            forEach(callback, pairs, order);
-        };
-        Object.defineProperty(object, 'forEach', {value: _forEach});
-
-        _map = function(callback) {
-            return map(callback, pairs, order);
-        };
-        Object.defineProperty(object, 'map', {value: _map});
-
-        _filter = function(callback) {
-            return filter(callback, pairs, order);
-        };
-        Object.defineProperty(object, 'filter', {value: _filter});
-
-        _some = function(callback) {
-            return some(callback, pairs, order);
-        };
-        Object.defineProperty(object, 'some', {value: _some});
-
-        _every = function(callback) {
-            return every(callback, pairs, order);
-        };
-        Object.defineProperty(object, 'every', {value: _every});
-
-        _reduce = function(accumulator, initial_value) {
-            return reduce(accumulator, initial_value, pairs, order);
-        };
-        Object.defineProperty(object, 'reduce', {value: _reduce});
-
-        _reduceRight = function(accumulator, initial_value) {
-            return reduceRight(accumulator, initial_value, pairs, order);
-        };
-        Object.defineProperty(object, 'reduceRight', {value: _reduceRight});
+        object = define(object);
 
         return object;
 
