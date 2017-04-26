@@ -11,6 +11,8 @@ var create_comparator,
     reduceRight,
     object_iteration;
 
+// given an array, create a comparator function that will
+// sort items based on their position in that array
 create_comparator = function(order) {
     var comparator;
     comparator = function(a, b) {
@@ -19,6 +21,7 @@ create_comparator = function(order) {
     return comparator;
 };
 
+// default lexicographic sort comparator function
 lexicographic = function(a, b) {
     return a > b;
 };
@@ -132,6 +135,8 @@ object_iteration = function(pairs) {
     var factory,
         instance;
 
+    // generate with a factory to isolate
+    // scoped variables for each instance
     factory = function() {
 
         var object,
@@ -154,6 +159,7 @@ object_iteration = function(pairs) {
         comparator = lexicographic;
         object = {};
 
+        // establish a default sort and iteration order
         if (pairs) {
             keys = Object.keys(pairs);
         } else {
@@ -161,6 +167,7 @@ object_iteration = function(pairs) {
         }
         order = keys.sort(comparator);
 
+        // copy input pairs to the new object
         if (pairs) {
             for (key in pairs) {
                 if (pairs.hasOwnProperty(key)) {
@@ -168,6 +175,10 @@ object_iteration = function(pairs) {
                 }
             }
         }
+
+        // create curried aliases for each function defined
+        // outside the factory scope which can then be bound
+        // with Object.defineProperty
 
         _indexOf = function(target) {
             return indexOf(target, pairs, order);
@@ -205,13 +216,16 @@ object_iteration = function(pairs) {
             return reduceRight(accumulator, initial_value, pairs, order);
         };
 
+        // accept a new comparator function and re-sort
         sort = function(new_comparator) {
             if (typeof new_comparator === 'function') {
                 comparator = new_comparator;
             }
             order = keys.sort(comparator);
-            return define(object);
+            return object;
         };
+
+        // non-enumerable binding of all aliased functions to the object
 
         define = function(target) {
             Object.defineProperty(target, 'indexOf', {value: _indexOf});
@@ -232,6 +246,8 @@ object_iteration = function(pairs) {
         return object;
 
     };
+
+    // return an instance
 
     instance = factory();
 
