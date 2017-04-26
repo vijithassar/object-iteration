@@ -107,11 +107,20 @@ describe('sorting', function() {
         let second_result = second.reduce(compress);
         assert.notEqual(first_result, second_result);
     });
-    it('can be chained', function() {
-        let item = o({x: 1, y: 2, z: 3}).sort(function(a, b) {
-            return a > b;
-        });
+    it('persists until later method calls', function() {
+        let item = o({x: 1, y: 2, z: 3})
+            .sort(function(a, b) {
+                return a < b;
+            });
+        let result = item.reduce(compress);
+        assert.equal(result, 'z3y2x1');
+    });
+    it('can be chained directly', function() {
+        let item = o({x: 1, y: 2, z: 3});
         let result = item
+            .sort(function(a, b) {
+                return a < b;
+            })
             .filter(function(value, key) {
                 return key !== 'y';
             })
