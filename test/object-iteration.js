@@ -181,6 +181,16 @@ describe('array method analogues', function() {
             let second_test = second.some(value => value === false);
             assert.equal(second_test, false);
         });
+        it('exactly matches the corresponding array method', function() {
+            let callback = function(item) {
+                return item === 'c';
+            };
+            let object = o({'0': 'a', '1': 'b'});
+            let array = ['a', 'b'];
+            let result_object = object.some(callback);
+            let result_array = array.some(callback);
+            assert.equal(result_object, result_array);
+        });
     });
 
     describe('every', function() {
@@ -192,6 +202,17 @@ describe('array method analogues', function() {
             let second_test = second.every(value => value === 'apple');
             assert.equal(second_test, false);
         });
+        it('exactly matches the corresponding array method', function() {
+            let callback = function(item) {
+                return typeof item === 'string';
+            };
+            let object = o({'0': 'a', '1': 'b'});
+            let array = ['a', 'b'];
+            let result_object = object.every(callback);
+            let result_array = array.every(callback);
+            assert.equal(result_object, result_array);
+        });
+
     });
 
     describe('map', function() {
@@ -203,6 +224,20 @@ describe('array method analogues', function() {
             let result = end.reduce(compress);
             assert.equal(result, 'ayybzz');
         });
+        it('exactly matches the corresponding array method', function() {
+            let transform = function(value, key) {
+                return value + key + '--';
+            };
+            let object = o({'0': 'a', '1': 'b'});
+            let array = ['a', 'b'];
+            let result_object = object
+                .map(transform)
+                .reduce(compress, '');
+            let result_array = array
+                .map(transform)
+                .reduce(compress, '');
+            assert.equal(result_object, result_array);
+        });
     });
 
     describe('filter', function() {
@@ -212,6 +247,20 @@ describe('array method analogues', function() {
                 return value !== 'z';
             });
             assert.equal(Object.keys(end).length, 1);
+        });
+        it('exactly matches the corresponding array method', function() {
+            let filter = function(value) {
+                return value !== 'b';
+            };
+            let object = o({'0': 'a', '1': 'b'});
+            let array = ['a', 'b'];
+            let result_object = object
+                .filter(filter)
+                .reduce(compress, '');
+            let result_array = array
+                .filter(filter)
+                .reduce(compress, '');
+            assert.equal(result_object, result_array);
         });
     });
 
@@ -224,6 +273,21 @@ describe('array method analogues', function() {
             });
             assert.equal(result, 'yazb');
         });
+        it('exactly matches the corresponding array method', function() {
+            let object = o({'0': 'a', '1': 'b'});
+            let array = ['a', 'b'];
+            let result_object = '';
+            let result_array = '';
+            object
+                .forEach(function(value, key) {
+                    result_object += value + key + '-';
+                });
+            array
+                .forEach(function(value, key) {
+                    result_array += value + key + '-';
+                });
+            assert.equal(result_object, result_array);
+        });
     });
 
     describe('reduce', function() {
@@ -232,6 +296,13 @@ describe('array method analogues', function() {
             let result = item.reduce(compress, 'z');
             assert.equal(result, 'za1b2');
         });
+        it('exactly matches the corresponding array method', function() {
+            let object = o({'0': 'a', '1': 'b'});
+            let array = ['a', 'b'];
+            let result_object = object.reduce(compress, '');
+            let result_array = array.reduce(compress, '');
+            assert.equal(result_object, result_array);
+        });
     });
 
     describe('reduceRight', function() {
@@ -239,6 +310,13 @@ describe('array method analogues', function() {
             let item = o({a: 1, b: 2});
             let result = item.reduceRight(compress, 'z');
             assert.equal(result, 'zb2a1');
+        });
+        it('exactly matches the corresponding array method', function() {
+            let object = o({'0': 'a', '1': 'b'});
+            let array = ['a', 'b'];
+            let result_object = object.reduceRight(compress, '');
+            let result_array = array.reduceRight(compress, '');
+            assert.equal(result_object, result_array);
         });
     });
 
