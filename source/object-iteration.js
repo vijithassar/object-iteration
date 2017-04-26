@@ -1,4 +1,5 @@
-var lexicographic,
+var create_comparator,
+    lexicographic,
     indexOf,
     lastIndexOf,
     forEach,
@@ -9,6 +10,14 @@ var lexicographic,
     reduce,
     reduceRight,
     object_iteration;
+
+create_comparator = function(order) {
+    var comparator;
+    comparator = function(a, b) {
+        return order.indexOf(a) - order.indexOf(b);
+    };
+    return comparator;
+};
 
 lexicographic = function(a, b) {
     return a > b;
@@ -56,7 +65,7 @@ map = function(callback, pairs, order) {
         value = pairs[key];
         result[key] = callback(value, key);
     });
-    return object_iteration(result);
+    return object_iteration(result).sort(create_comparator(order));
 };
 
 filter = function(callback, pairs, order) {
@@ -69,7 +78,7 @@ filter = function(callback, pairs, order) {
             result[key] = value;
         }
     });
-    return object_iteration(result);
+    return object_iteration(result).sort(create_comparator(order));
 };
 
 some = function(callback, pairs, order) {
@@ -120,9 +129,10 @@ reduceRight = function(accumulator, initial_value, pairs, order) {
 
 object_iteration = function(pairs) {
 
-    var instance;
+    var factory,
+        instance;
 
-    instance = function() {
+    factory = function() {
 
         var object,
             keys,
@@ -199,7 +209,7 @@ object_iteration = function(pairs) {
             if (typeof new_comparator === 'function') {
                 comparator = new_comparator;
             }
-            order.sort(comparator);
+            order = keys.sort(comparator);
             return define(object);
         };
 
@@ -223,7 +233,9 @@ object_iteration = function(pairs) {
 
     };
 
-    return instance();
+    instance = factory();
+
+    return instance;
 
 };
 
