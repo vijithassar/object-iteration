@@ -183,38 +183,47 @@ object_iteration = function(pairs) {
         _indexOf = function(target) {
             return indexOf(target, pairs, order);
         };
+        Object.defineProperty(object, 'indexOf', {value: _indexOf});
 
         _lastIndexOf = function(target) {
             return lastIndexOf(target, pairs, order);
         };
+        Object.defineProperty(object, 'lastIndexOf', {value: _lastIndexOf});
 
         _forEach = function(callback) {
             forEach(callback, pairs, order);
         };
+        Object.defineProperty(object, 'forEach', {value: _forEach});
 
         _map = function(callback) {
             return map(callback, pairs, order);
         };
+        Object.defineProperty(object, 'map', {value: _map});
 
         _filter = function(callback) {
             return filter(callback, pairs, order);
         };
+        Object.defineProperty(object, 'filter', {value: _filter});
 
         _some = function(callback) {
             return some(callback, pairs, order);
         };
+        Object.defineProperty(object, 'some', {value: _some});
 
         _every = function(callback) {
             return every(callback, pairs, order);
         };
+        Object.defineProperty(object, 'every', {value: _every});
 
         _reduce = function(accumulator, initial_value) {
             return reduce(accumulator, initial_value, pairs, order);
         };
+        Object.defineProperty(object, 'reduce', {value: _reduce});
 
         _reduceRight = function(accumulator, initial_value) {
             return reduceRight(accumulator, initial_value, pairs, order);
         };
+        Object.defineProperty(object, 'reduceRight', {value: _reduceRight});
 
         // accept a new comparator function and re-sort
         sort = function(new_comparator) {
@@ -228,7 +237,6 @@ object_iteration = function(pairs) {
         // non-enumerable binding of all aliased functions to the object
 
         define = function(target) {
-            Object.defineProperty(target, 'indexOf', {value: _indexOf});
             Object.defineProperty(target, 'lastIndexOf', {value: _lastIndexOf});
             Object.defineProperty(target, 'forEach', {value: _forEach});
             Object.defineProperty(target, 'map', {value: _map});
