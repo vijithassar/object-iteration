@@ -115,6 +115,25 @@ describe('sorting', function() {
         let result = item.reduce(compress);
         assert.equal(result, 'z3y2x1');
     });
+    it('persists between chained method calls', function() {
+        let item = o({x: 1, y: 2, z: 3});
+        let first_order = '';
+        let second_order = '';
+        item
+            .sort(function(a, b) {
+                return a < b;
+            });
+        item
+            .map(function(value, key) {
+                first_order += value + key;
+                return value;
+            })
+            .map(function(value, key) {
+                second_order += value + key;
+                return value;
+            });
+        assert.equal(first_order, second_order);
+    });
     it('can be chained directly', function() {
         let item = o({x: 1, y: 2, z: 3});
         let result = item
