@@ -269,3 +269,5 @@ prints:
 'index 2 - vegetable:carrot'
 */
 ```
+
+![o-face](https://cloud.githubusercontent.com/assets/3488572/25469491/798fbb56-2aea-11e7-9643-deb6f10d0457.png)
