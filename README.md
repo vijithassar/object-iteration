@@ -63,7 +63,7 @@ let o = require('object-iteration');
 // OR
 
 // ES6 import with o binding
-import { 'object_iteration' as o } from './object-iteration.js';
+import { object_iteration as o } from './object-iteration.js';
 ```
 
 In use:
@@ -114,7 +114,7 @@ prints:
 */
 ```
 
-As with arrays, you can provide your own comparator function to change the sort order.
+As with arrays, you can provide your own comparator function to change the sort order:
 
 ```javascript
 let pairs = o({
@@ -144,7 +144,7 @@ All ES5 array iteration methods are reimplemented. The parameters taken by the c
 - `forEach` iterates across the object and runs a callback function on each key-value pair
 - `map` returns a new iterable object with the values transformed by the callback function (keys are unchanged)
 - `filter` returns a new iterable object containing only key-value pairs in which the predicate function returns true
-- `some` returns a boolean `true` if *any* key-value pairs in the object evaluates to `true` given the specified predicate function, otherwise returns `false`
+- `some` returns a boolean `true` if *any* key-value pairs in the object evaluate to `true` given the specified predicate function, otherwise returns `false`
 - `every` returns a boolean `true` if *all* key-value pairs in the object evaluate to `true` given the specified predicate function, otherwise returns `false`
 - `reduce` reduces an object to a single value with an accumulator function
 - `reduceRight` reduces an object to a single value with an accumulator function, iterating in reverse order
