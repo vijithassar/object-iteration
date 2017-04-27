@@ -1,6 +1,6 @@
 {
   "name": "object-iteration",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "iteration methods for plain JavaScript objects implemented in the style of the ES5 array methods",
   "main": "build/object-iteration.js",
   "module": "index.js",
