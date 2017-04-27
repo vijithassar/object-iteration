@@ -12,6 +12,8 @@
     "dev": "rollup --config --watch",
     "test": "mocha",
     "pretest": "npm run build",
+    "prepublish": "npm run lint && npm run test && npm run build",
+    "postinstall": "npm run build",
     "lint": "eslint --config eslintrc.json source && eslint --config eslintrc.json test"
   },
   "keywords": [
