@@ -145,7 +145,6 @@ object_iteration = function(pairs) {
             sort,
             comparator,
             order,
-            define,
             _indexOf,
             _lastIndexOf,
             _forEach,
@@ -233,23 +232,7 @@ object_iteration = function(pairs) {
             order = keys.sort(comparator);
             return object;
         };
-
-        // non-enumerable binding of all aliased functions to the object
-
-        define = function(target) {
-            Object.defineProperty(target, 'lastIndexOf', {value: _lastIndexOf});
-            Object.defineProperty(target, 'forEach', {value: _forEach});
-            Object.defineProperty(target, 'map', {value: _map});
-            Object.defineProperty(target, 'filter', {value: _filter});
-            Object.defineProperty(target, 'some', {value: _some});
-            Object.defineProperty(target, 'every', {value: _every});
-            Object.defineProperty(target, 'reduce', {value: _reduce});
-            Object.defineProperty(target, 'reduceRight', {value: _reduceRight});
-            Object.defineProperty(target, 'sort', {value: sort});
-            return target;
-        };
-
-        object = define(object);
+        Object.defineProperty(object, 'sort', {value: sort});
 
         return object;
 

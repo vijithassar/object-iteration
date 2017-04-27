@@ -1,24 +1,26 @@
 # Object Iteration
 
-reimplementing JavaScript's [ES5 array methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#Iteration_methods) for use with plain objects
+reimplementing the [ES5 array methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#Iteration_methods) for use with plain old JavaScript objects
 
 ## Quick Start
 
-**TL;DR**: Pass objects through the function to extend with useful methods inspired by arrays. These new object iteration methods are exactly the same as the ES5 array methods, but every callback takes `value` and `key` as parameters (so, a string for `key` instead of an integer for `index`). The default iteration order is lexicographic, or you can provide your own sort comparison function.
+**TL;DR**: Pass objects with key-value pairs through the function to extend them with new methods which are almost exactly the same as the ES5 array methods. The only difference is that every callback takes `value` and `key` as parameters, where `key` is a *string* instead of an *integer* as with arrays. The default iteration order is lexicographic until another sort comparator function is specified.
 
 ## Overview
 
-The ES5 array iteration methods are wonderful and powerful, but they only work for arrays; hashmaps are out of luck. JavaScript makes no promises about the order when you iterate across the properties of an object, and it's hard to get meaningful behavior out of concepts like `forEach` and `reduce` when you do not have a stable order. This tool adds a small and largely invisible wrapper to your plain JavaScript objects which enforces a stable iteration order, and then uses that stable order to build equivalents for all your favorite array methods, like `map`, `filter`, and `reduce`.
+### What
 
-## Why
+The ES5 array iteration methods elegant and powerful, but they only work for arrays; hashmaps are out of luck. JavaScript makes no promises about the order when you iterate across the properties of an object, so it's hard to get meaningful behavior out of order-sensitive concepts like `forEach` and `reduce` when a deterministic order does not exist. This tool adds a small and largely invisible wrapper around plain old JavaScript objects which enforces a stable iteration order, and then it uses that stable order to create equivalents for all your favorite array methods, like `map`, `filter`, and `reduce`.
 
-List-based functional programming favors a paradigm where a *large variety of functions* can all work on a *small variety of data structures* which all implement consistent interfaces. This is an attempt to extend the power of iteration methods from arrays to also include key-value pairs.
+### Why
+
+List-based functional programming favors a paradigm where a *large variety of functions* operate on a *small variety of data structures* which all implement a consistent interface. This module is an attempt to extend the power of iteration methods from arrays to also include key-value pairs by *re-implementing the ES5 array method interface*.
 
 Plenty of other iteration tools and libraries exist for use with objects and hashmaps, but most are idiosyncratic or require specialized instantiation. This tool strives to be generic: it is **minimally invasive**, can **extend any arbitrary object**, reimplements **all ES5 iteration methods** and **exactly matches the existing APIs**.
 
-## How
+### How
 
-The wrapper function creates a closure which is used to store an array of the object's enumerable properties, as determined by `Object.keys()`. Hidden non-enumerable methods are then added to the object with APIs that match the ES5 array methods, except that the property `key` (a string) is substituted for the array `index` (an integer). For the most part, the original array iteration methods are used under the hood, applied internally to the result of `Object.keys().sort()`, so behavior should mostly be consistent with the original ES5 array methods.
+Extending an object with iteration methods creates a closure which is used to store an array of the object's enumerable properties. Iteration order is determined from sorting the enumerable properties, either lexicographically or with an optional custom comparator function. Hidden non-enumerable methods are added to the object with APIs that exactly match the ES5 array methods, except that the property `key` (typically a *string*) is substituted for the array `index` (always an *integer*). This one obvious distinction aside, the behavior is consistent, because the original ES5 array iteration methods are still used under the hood, applied internally to the result of `Object.keys().sort()`.
 
 ## Using
 
@@ -50,9 +52,9 @@ let object_iteration = require('object-iteration');
 
 ### Syntax
 
-I've taken to storing this function in a variable called `o`, including in the documentation below. The letter semantically fits with the concept of extending an **object**, and it is also **short** and **symmetrical**. I find that this visual balance means that using it inline still feels roughly comparable to a regular object literal.
+I've taken to storing this function in a variable called `o`, and use that convention in the documentation below. The letter semantically fits with the concept of extending an **object**, and it is also **short** and **symmetrical**. That visual balance means that using it inline still feels roughly comparable to a regular object literal.
 
-To import or require:
+To import or require in this manner:
 
 ```javascript
 // CommonJS require with o alias
@@ -67,31 +69,29 @@ import { 'object_iteration' as o } from './object-iteration.js';
 In use:
 
 ```javascript
-// a regular object literal, for which
-// iterating is a pain
-let pairs = {
-    animal: 'dog',
-    vegetable: 'carrot',
-    mineral: 'diamond'
-};
-
-// wrap the object literal in the function,
-// which has been aliased to the letter o,
-// and now you can use iteration methods
-let iterable_pairs = o({
+// wrap the object literal in the function to extend
+let pairs = o({
     animal: 'dog',
     vegetable: 'carrot',
     mineral: 'diamond'
 });
-```
 
-It looks so adorable, hee hee! But I mean, do whatever you want.
+// your key-value pairs now have iteration methods
+pairs
+    .filter(function(value, key) {
+        // ...
+    })
+    .map(function(value, key) {
+        // ...
+    })
+    .reduce(function(previous, value, key) {
+        // ...
+    });
+```
 
 ## API
 
 ### Sorting
-
-Stable sorting is a prerequisite for useful iteration. Any object passed through the wrapper function will then have consistent iteration available.
 
 By default, sorting is lexicographic/alphabetical by property name:
 
@@ -114,7 +114,7 @@ prints:
 */
 ```
 
-As with arrays, you can provide your own comparison function to change the sort order, and sorting is applied separately to each item:
+As with arrays, you can provide your own comparator function to change the sort order.
 
 ```javascript
 let pairs = o({
@@ -137,29 +137,31 @@ prints:
 */
 ```
 
-### Iteration
+### Iteration Methods
 
-All ES5 array iteration methods are reimplemented:
+All ES5 array iteration methods are reimplemented. The parameters taken by the callback functions are exactly the same as with the original array methods, except that the object's *string* `key` will be used instead of the array method's *integer* `index`.
 
-- `forEach` iterates across the object and runs a callback function on each item
-- `map` returns a new object with the values transformed by the callback function
-- `filter` returns a new object containing only key/value pairs in which the predicate function returns true
+- `forEach` iterates across the object and runs a callback function on each key-value pair
+- `map` returns a new iterable object with the values transformed by the callback function (keys are unchanged)
+- `filter` returns a new iterable object containing only key-value pairs in which the predicate function returns true
+- `some` returns a boolean `true` if *any* key-value pairs in the object evaluates to `true` given the specified predicate function, otherwise returns `false`
+- `every` returns a boolean `true` if *all* key-value pairs in the object evaluate to `true` given the specified predicate function, otherwise returns `false`
 - `reduce` reduces an object to a single value with an accumulator function
 - `reduceRight` reduces an object to a single value with an accumulator function, iterating in reverse order
 
-The parameters taken by the callback functions (or accumulator functions, in the case of `reduce` and `reduceRight`) are exactly the same, except that the string `key` is substituted for the integer `index` (usually this is the second parameter).
+For more detailed information about the behavior of these methods, consult [Mozilla's documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#Iteration_methods).
 
-### Searching
+### Index Methods
 
-Index lookup methods like `indexOf` and `lastIndexOf` don't mean anything when the iteration order is unstable, but they *do* have meaning once the keys have a consistent order, so they are reimplemented:
+Index lookup methods like `indexOf` and `lastIndexOf` don't mean anything in an ordinary hashmap where the iteration order is unstable, but they *do* have meaning once the keys have a consistent order, so they are reimplemented:
 
 ```javascript
 // lexicographic sort by default
 let pairs = o({
+    animal2: 'dog',
     animal: 'dog',
     vegetable: 'carrot',
-    mineral: 'diamond',
-    animal2: 'dog'
+    mineral: 'diamond'
 });
 console.log(pairs.indexOf('dog')); // prints 'animal'
 console.log(pairs.lastIndexOf('dog')); // prints 'animal2'
@@ -167,7 +169,7 @@ console.log(pairs.lastIndexOf('dog')); // prints 'animal2'
 
 ## Shared Functions
 
-Because the APIs for the callback and accumulator functions matches the original ES5 array implementations, you can *literally use the same functions* with both arrays and hashmaps.
+The APIs for the iteration methods **exactly match** the original array implementations. As a result, in many cases your callback, accumulator, and predicate functions can be *reused verbatim* with both arrays and hashmaps.
 
 ```javascript
 // expand an array or object into a readable phrase
@@ -242,9 +244,9 @@ names_sentences result:
 
 ## Nope
 
-- This will not help you with iteration via imperative loops such as `for-in` or ES6 `for-of`, which will still happen in an arbitrary order. Consider using `forEach` for those scenarios instead.
+- This will not help you with iteration via imperative loops such as `for-in` or ES6 `for-of`, which do not call a method and thus will still happen in an arbitrary and unpredictable order. Consider using `forEach` for those scenarios instead.
 - Objects are cloned superficially and probably won't replicate elaborate prototype chains, but feel free to try whatever crazy scheme you have in mind.
-- It would be easy enough to track the iteration index and provide it as a third parameter to callback function, but it seems more conceptually useful to *exactly match* the function signature of the array methods being imitated. If you need the iteration number as an integer in addition to the property name as a string, just initialize a count variable outside the callback scope:
+- It would be easy enough to track the iteration index and provide it as a third parameter to the callback function, but it seems more conceptually useful to *exactly match* the function signature of the array methods being imitated. If you need the iteration count as an integer in addition to the key as a string, just initialize a counter outside the scope of the callback function:
 
 ```javascript
 let pairs = o({
