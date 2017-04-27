@@ -23,7 +23,7 @@ create_comparator = function(order) {
 
 // default lexicographic sort comparator function
 lexicographic = function(a, b) {
-    return a > b;
+    return a > b ? 1 : -1;
 };
 
 indexOf = function(target, pairs, order) {
