@@ -132,117 +132,102 @@ reduceRight = function(accumulator, initial_value, pairs, order) {
 
 object_iteration = function(pairs) {
 
-    var factory,
-        instance;
+    var object,
+        keys,
+        key,
+        sort,
+        comparator,
+        order,
+        _indexOf,
+        _lastIndexOf,
+        _forEach,
+        _map,
+        _filter,
+        _some,
+        _every,
+        _reduce,
+        _reduceRight;
 
-    // generate with a factory to isolate
-    // scoped variables for each instance
-    factory = function() {
+    comparator = lexicographic;
+    object = {};
 
-        var object,
-            keys,
-            key,
-            sort,
-            comparator,
-            order,
-            _indexOf,
-            _lastIndexOf,
-            _forEach,
-            _map,
-            _filter,
-            _some,
-            _every,
-            _reduce,
-            _reduceRight;
+    // establish a default sort and iteration order
+    if (pairs) {
+        keys = Object.keys(pairs);
+    } else {
+        keys = [];
+    }
+    order = keys.sort(comparator);
 
-        comparator = lexicographic;
-        object = {};
+    // copy input pairs to the new object
+    if (pairs) {
+        for (key in pairs) {
+            if (pairs.hasOwnProperty(key)) {
+                object[key] = pairs[key];
+            }
+        }
+    }
 
-        // establish a default sort and iteration order
-        if (pairs) {
-            keys = Object.keys(pairs);
-        } else {
-            keys = [];
+    // create curried aliases for each function defined
+    // outside the factory scope which can then be bound
+    // with Object.defineProperty
+
+    _indexOf = function(target) {
+        return indexOf(target, pairs, order);
+    };
+    Object.defineProperty(object, 'indexOf', {value: _indexOf});
+
+    _lastIndexOf = function(target) {
+        return lastIndexOf(target, pairs, order);
+    };
+    Object.defineProperty(object, 'lastIndexOf', {value: _lastIndexOf});
+
+    _forEach = function(callback) {
+        forEach(callback, pairs, order);
+    };
+    Object.defineProperty(object, 'forEach', {value: _forEach});
+
+    _map = function(callback) {
+        return map(callback, pairs, order);
+    };
+    Object.defineProperty(object, 'map', {value: _map});
+
+    _filter = function(callback) {
+        return filter(callback, pairs, order);
+    };
+    Object.defineProperty(object, 'filter', {value: _filter});
+
+    _some = function(callback) {
+        return some(callback, pairs, order);
+    };
+    Object.defineProperty(object, 'some', {value: _some});
+
+    _every = function(callback) {
+        return every(callback, pairs, order);
+    };
+    Object.defineProperty(object, 'every', {value: _every});
+
+    _reduce = function(accumulator, initial_value) {
+        return reduce(accumulator, initial_value, pairs, order);
+    };
+    Object.defineProperty(object, 'reduce', {value: _reduce});
+
+    _reduceRight = function(accumulator, initial_value) {
+        return reduceRight(accumulator, initial_value, pairs, order);
+    };
+    Object.defineProperty(object, 'reduceRight', {value: _reduceRight});
+
+    // accept a new comparator function and re-sort
+    sort = function(new_comparator) {
+        if (typeof new_comparator === 'function') {
+            comparator = new_comparator;
         }
         order = keys.sort(comparator);
-
-        // copy input pairs to the new object
-        if (pairs) {
-            for (key in pairs) {
-                if (pairs.hasOwnProperty(key)) {
-                    object[key] = pairs[key];
-                }
-            }
-        }
-
-        // create curried aliases for each function defined
-        // outside the factory scope which can then be bound
-        // with Object.defineProperty
-
-        _indexOf = function(target) {
-            return indexOf(target, pairs, order);
-        };
-        Object.defineProperty(object, 'indexOf', {value: _indexOf});
-
-        _lastIndexOf = function(target) {
-            return lastIndexOf(target, pairs, order);
-        };
-        Object.defineProperty(object, 'lastIndexOf', {value: _lastIndexOf});
-
-        _forEach = function(callback) {
-            forEach(callback, pairs, order);
-        };
-        Object.defineProperty(object, 'forEach', {value: _forEach});
-
-        _map = function(callback) {
-            return map(callback, pairs, order);
-        };
-        Object.defineProperty(object, 'map', {value: _map});
-
-        _filter = function(callback) {
-            return filter(callback, pairs, order);
-        };
-        Object.defineProperty(object, 'filter', {value: _filter});
-
-        _some = function(callback) {
-            return some(callback, pairs, order);
-        };
-        Object.defineProperty(object, 'some', {value: _some});
-
-        _every = function(callback) {
-            return every(callback, pairs, order);
-        };
-        Object.defineProperty(object, 'every', {value: _every});
-
-        _reduce = function(accumulator, initial_value) {
-            return reduce(accumulator, initial_value, pairs, order);
-        };
-        Object.defineProperty(object, 'reduce', {value: _reduce});
-
-        _reduceRight = function(accumulator, initial_value) {
-            return reduceRight(accumulator, initial_value, pairs, order);
-        };
-        Object.defineProperty(object, 'reduceRight', {value: _reduceRight});
-
-        // accept a new comparator function and re-sort
-        sort = function(new_comparator) {
-            if (typeof new_comparator === 'function') {
-                comparator = new_comparator;
-            }
-            order = keys.sort(comparator);
-            return object;
-        };
-        Object.defineProperty(object, 'sort', {value: sort});
-
         return object;
-
     };
+    Object.defineProperty(object, 'sort', {value: sort});
 
-    // return an instance
-
-    instance = factory();
-
-    return instance;
+    return object;
 
 };
 
