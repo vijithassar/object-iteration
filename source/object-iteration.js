@@ -52,80 +52,80 @@ lastIndexOf = function(target, pairs, order) {
     }
 };
 
-forEach = function(callback, pairs, order) {
+forEach = function(callback, context, original, pairs, order) {
     order.forEach(function(key) {
         var value;
         value = pairs[key];
-        callback(value, key);
+        callback.call(context, value, key, original);
     });
 };
 
-map = function(callback, pairs, order) {
+map = function(callback, context, original, pairs, order) {
     var result;
     result = {};
     order.forEach(function(key) {
         var value;
         value = pairs[key];
-        result[key] = callback(value, key);
+        result[key] = callback.call(context, value, key, original);
     });
     return object_iteration(result).sort(create_comparator(order));
 };
 
-filter = function(callback, pairs, order) {
+filter = function(callback, context, original, pairs, order) {
     var result;
     result = {};
     order.forEach(function(key) {
         var value;
         value = pairs[key];
-        if (callback(value, key)) {
+        if (callback.call(context, value, key, original)) {
             result[key] = value;
         }
     });
     return object_iteration(result).sort(create_comparator(order));
 };
 
-some = function(callback, pairs, order) {
+some = function(callback, context, original, pairs, order) {
     var result;
     result = false;
     order.forEach(function(key) {
         var value;
         value = pairs[key];
-        if (callback(value, key)) {
+        if (callback.call(context, value, key, original)) {
             result = true;
         }
     });
     return result;
 };
 
-every = function(callback, pairs, order) {
+every = function(callback, context, original, pairs, order) {
     var result;
     result = true;
     order.forEach(function(key) {
         var value;
         value = pairs[key];
-        if (! callback(value, key)) {
+        if (! callback.call(context, value, key, original)) {
             result = false;
         }
     });
     return result;
 };
 
-reduce = function(accumulator, initial_value, pairs, order) {
+reduce = function(accumulator, initial_value, original, pairs, order) {
     var reduced;
     reduced = order.reduce(function(previous_result, key) {
         var value;
         value = pairs[key];
-        return accumulator(previous_result, value, key);
+        return accumulator(previous_result, value, key, original);
     }, initial_value);
     return reduced;
 };
 
-reduceRight = function(accumulator, initial_value, pairs, order) {
+reduceRight = function(accumulator, initial_value, original, pairs, order) {
     var reduced;
     reduced = order.reduceRight(function(previous_result, key) {
         var value;
         value = pairs[key];
-        return accumulator(previous_result, value, key);
+        return accumulator(previous_result, value, key, original);
     }, initial_value);
     return reduced;
 };
@@ -182,38 +182,53 @@ object_iteration = function(pairs) {
     };
     Object.defineProperty(object, 'lastIndexOf', {value: _lastIndexOf});
 
-    _forEach = function(callback) {
-        forEach(callback, pairs, order);
+    _forEach = function(callback, context) {
+        if (arguments.length === 1) {
+            context = this;
+        }
+        forEach(callback, context, object, pairs, order);
     };
     Object.defineProperty(object, 'forEach', {value: _forEach});
 
-    _map = function(callback) {
-        return map(callback, pairs, order);
+    _map = function(callback, context) {
+        if (arguments.length === 1) {
+            context = this;
+        }
+        return map(callback, context, object, pairs, order);
     };
     Object.defineProperty(object, 'map', {value: _map});
 
-    _filter = function(callback) {
-        return filter(callback, pairs, order);
+    _filter = function(callback, context) {
+        if (arguments.length === 1) {
+            context = this;
+        }
+        return filter(callback, context, object, pairs, order);
     };
     Object.defineProperty(object, 'filter', {value: _filter});
 
-    _some = function(callback) {
-        return some(callback, pairs, order);
+    _some = function(callback, context) {
+        if (arguments.length === 1) {
+            context = this;
+        }
+        return some(callback, context, object, pairs, order);
     };
     Object.defineProperty(object, 'some', {value: _some});
 
-    _every = function(callback) {
-        return every(callback, pairs, order);
+    _every = function(callback, context) {
+        if (arguments.length === 1) {
+            context = this;
+        }
+        return every(callback, context, object, pairs, order);
     };
     Object.defineProperty(object, 'every', {value: _every});
 
     _reduce = function(accumulator, initial_value) {
-        return reduce(accumulator, initial_value, pairs, order);
+        return reduce(accumulator, initial_value, object, pairs, order);
     };
     Object.defineProperty(object, 'reduce', {value: _reduce});
 
     _reduceRight = function(accumulator, initial_value) {
-        return reduceRight(accumulator, initial_value, pairs, order);
+        return reduceRight(accumulator, initial_value, object, pairs, order);
     };
     Object.defineProperty(object, 'reduceRight', {value: _reduceRight});
 

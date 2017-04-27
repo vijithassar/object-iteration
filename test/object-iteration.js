@@ -181,6 +181,21 @@ describe('array method analogues', function() {
             let second_test = second.some(value => value === false);
             assert.equal(second_test, false);
         });
+        it('passes the original object', function() {
+            let item = o({a: 'y', b: 'z'});
+            item.some(function(value, key, original) {
+                assert.equal(item, original);
+                return true;
+            });
+        });
+        it('sets the context', function() {
+            let item = o({a: 'y', b: 'z'});
+            let test = [];
+            item.some(function(value) {
+                assert.equal(this, test);
+                return value;
+            }, test);
+        });
         it('exactly matches array.some', function() {
             let callback = function(item) {
                 return item === 'c';
@@ -202,6 +217,21 @@ describe('array method analogues', function() {
             let second_test = second.every(value => value === 'apple');
             assert.equal(second_test, false);
         });
+        it('passes the original object', function() {
+            let item = o({a: 'y', b: 'z'});
+            item.every(function(value, key, original) {
+                assert.equal(item, original);
+                return true;
+            });
+        });
+        it('sets the context', function() {
+            let item = o({a: 'y', b: 'z'});
+            let test = [];
+            item.every(function(value) {
+                assert.equal(this, test);
+                return value;
+            }, test);
+        });
         it('exactly matches array.every', function() {
             let callback = function(item) {
                 return typeof item === 'string';
@@ -212,7 +242,6 @@ describe('array method analogues', function() {
             let result_array = array.every(callback);
             assert.equal(result_object, result_array);
         });
-
     });
 
     describe('map', function() {
@@ -224,17 +253,32 @@ describe('array method analogues', function() {
             let result = end.reduce(compress);
             assert.equal(result, 'ayybzz');
         });
+        it('passes the original object', function() {
+            let item = o({a: 'y', b: 'z'});
+            item.map(function(value, key, original) {
+                assert.equal(item, original);
+                return value;
+            });
+        });
+        it('sets the context', function() {
+            let item = o({a: 'y', b: 'z'});
+            let test = [];
+            item.map(function(value) {
+                assert.equal(this, test);
+                return value;
+            }, test);
+        });
         it('exactly matches array.map', function() {
             let transform = function(value, key) {
-                return value + key + '--';
+                return value + key + this + '--';
             };
             let object = o({'0': 'a', '1': 'b'});
             let array = ['a', 'b'];
             let result_object = object
-                .map(transform)
+                .map(transform, 'a')
                 .reduce(compress, '');
             let result_array = array
-                .map(transform)
+                .map(transform, 'a')
                 .reduce(compress, '');
             assert.equal(result_object, result_array);
         });
@@ -247,6 +291,21 @@ describe('array method analogues', function() {
                 return value !== 'z';
             });
             assert.equal(Object.keys(end).length, 1);
+        });
+        it('passes the original object', function() {
+            let item = o({a: 'y', b: 'z'});
+            item.filter(function(value, key, original) {
+                assert.equal(item, original);
+                return true;
+            });
+        });
+        it('sets the context', function() {
+            let item = o({a: 'y', b: 'z'});
+            let test = [];
+            item.filter(function(value) {
+                assert.equal(this, test);
+                return value;
+            }, test);
         });
         it('exactly matches array.filter', function() {
             let filter = function(value) {
@@ -273,6 +332,19 @@ describe('array method analogues', function() {
             });
             assert.equal(result, 'yazb');
         });
+        it('passes the original object', function() {
+            let item = o({a: 'y', b: 'z'});
+            item.forEach(function(value, key, original) {
+                assert.equal(item, original);
+            });
+        });
+        it('sets the context', function() {
+            let item = o({a: 'y', b: 'z'});
+            let test = [];
+            item.forEach(function() {
+                assert.equal(this, test);
+            }, test);
+        });
         it('exactly matches array.forEach', function() {
             let object = o({'0': 'a', '1': 'b'});
             let array = ['a', 'b'];
@@ -296,6 +368,13 @@ describe('array method analogues', function() {
             let result = item.reduce(compress, 'z');
             assert.equal(result, 'za1b2');
         });
+        it('passes the original object', function() {
+            let item = o({a: 1, b: 2});
+            item.reduceRight(function(previous, current, key, original) {
+                assert.equal(original, item);
+                return null;
+            });
+        });
         it('exactly matches array.reduce', function() {
             let object = o({'0': 'a', '1': 'b'});
             let array = ['a', 'b'];
@@ -310,6 +389,13 @@ describe('array method analogues', function() {
             let item = o({a: 1, b: 2});
             let result = item.reduceRight(compress, 'z');
             assert.equal(result, 'zb2a1');
+        });
+        it('passes the original object', function() {
+            let item = o({a: 1, b: 2});
+            item.reduceRight(function(previous, current, key, original) {
+                assert.equal(original, item);
+                return null;
+            });
         });
         it('exactly matches array.reduceRight', function() {
             let object = o({'0': 'a', '1': 'b'});
