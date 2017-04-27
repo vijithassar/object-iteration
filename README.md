@@ -182,9 +182,9 @@ let numbers_phrases = numbers.map(phrase);
 /*
 numbers_phrases result:
 [
-    "1's favorite food is pizza",
-    "2's favorite food is spaghetti",
-    "3's favorite food is chocolate"
+    "0's favorite food is pizza",
+    "1's favorite food is spaghetti",
+    "2's favorite food is chocolate"
 ]
 */
 
@@ -229,9 +229,9 @@ let names_sentences = names.map(sentence);
 /*
 numbers_sentences result:
 [
-    "Test subject #1's favorite food is pizza.",
-    "Test subject #2's favorite food is spaghetti.",
-    "Test subject #3's favorite food is chocolate."
+    "Test subject #0's favorite food is pizza.",
+    "Test subject #1's favorite food is spaghetti.",
+    "Test subject #2's favorite food is chocolate."
 ]
 
 names_sentences result:
