@@ -10,7 +10,7 @@ reimplementing the [ES5 array methods](https://developer.mozilla.org/en-US/docs/
 
 ### What
 
-The ES5 array iteration methods elegant and powerful, but they only work for arrays; hashmaps are out of luck. JavaScript makes no promises about the order when you iterate across the properties of an object, so it's hard to get meaningful behavior out of order-sensitive concepts like `forEach` and `reduce` when a deterministic order does not exist. This tool adds a small and largely invisible wrapper around plain old JavaScript objects which enforces a stable iteration order, and then it uses that stable order to create equivalents for all your favorite array methods, like `map`, `filter`, and `reduce`.
+The ES5 array iteration methods are elegant and powerful, but they only work for arrays; hashmaps are out of luck. JavaScript makes no promises about the order when you iterate across the properties of an object, so it's hard to get meaningful behavior out of order-sensitive concepts like `forEach` and `reduce` when a deterministic order does not exist. This tool adds a small and largely invisible wrapper around plain old JavaScript objects which enforces a stable iteration order, and then it uses that stable order to create equivalents for all your favorite array methods, like `map`, `filter`, and `reduce`.
 
 ### Why
 
