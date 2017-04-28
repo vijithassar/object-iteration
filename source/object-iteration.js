@@ -1,5 +1,4 @@
-var create_comparator,
-    lexicographic,
+var lexicographic,
     indexOf,
     lastIndexOf,
     forEach,
@@ -10,16 +9,6 @@ var create_comparator,
     reduce,
     reduceRight,
     object_iteration;
-
-// given an array, create a comparator function that will
-// sort items based on their position in that array
-create_comparator = function(order) {
-    var comparator;
-    comparator = function(a, b) {
-        return order.indexOf(a) - order.indexOf(b);
-    };
-    return comparator;
-};
 
 // default lexicographic sort comparator function
 lexicographic = function(a, b) {
@@ -60,7 +49,7 @@ forEach = function(callback, context, original, pairs, order) {
     });
 };
 
-map = function(callback, context, original, pairs, order) {
+map = function(callback, context, original, comparator, pairs, order) {
     var result;
     result = {};
     order.forEach(function(key) {
@@ -68,10 +57,10 @@ map = function(callback, context, original, pairs, order) {
         value = pairs[key];
         result[key] = callback.call(context, value, key, original);
     });
-    return object_iteration(result).sort(create_comparator(order));
+    return object_iteration(result).sort(comparator);
 };
 
-filter = function(callback, context, original, pairs, order) {
+filter = function(callback, context, original, comparator, pairs, order) {
     var result;
     result = {};
     order.forEach(function(key) {
@@ -81,7 +70,7 @@ filter = function(callback, context, original, pairs, order) {
             result[key] = value;
         }
     });
-    return object_iteration(result).sort(create_comparator(order));
+    return object_iteration(result).sort(comparator);
 };
 
 some = function(callback, context, original, pairs, order) {
@@ -194,7 +183,7 @@ object_iteration = function(pairs) {
         if (arguments.length === 1) {
             context = this;
         }
-        return map(callback, context, object, pairs, order);
+        return map(callback, context, object, comparator, pairs, order);
     };
     Object.defineProperty(object, 'map', {value: _map});
 
@@ -202,7 +191,7 @@ object_iteration = function(pairs) {
         if (arguments.length === 1) {
             context = this;
         }
-        return filter(callback, context, object, pairs, order);
+        return filter(callback, context, object, comparator, pairs, order);
     };
     Object.defineProperty(object, 'filter', {value: _filter});
 
