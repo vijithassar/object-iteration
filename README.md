@@ -37,7 +37,7 @@ The source code is an ES6 module, usable directly via `package.module`. The comp
 
 ```javascript
 // ES6 import
-import { 'object-iteration' } from './object-iteration.js';
+import { 'object_iteration' } from './object-iteration.js';
 ```
 
 ```javascript
