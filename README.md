@@ -26,7 +26,7 @@ Extending an object with iteration methods creates a closure which is used to st
 
 ### Installation
 
-Clone this repository, or install from npm:
+Clone this repository, or install from [npm](https://www.npmjs.com/package/object-iteration):
 
 ```bash
 # install object iteration package
