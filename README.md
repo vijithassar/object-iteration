@@ -245,7 +245,7 @@ names_sentences result:
 ## Nope
 
 - This will not help you with iteration via imperative loops such as `for-in` or ES6 `for-of`, which do not call a method and thus will still happen in an arbitrary and unpredictable order. Consider using `forEach` for those scenarios instead.
-- Objects are cloned superficially and probably won't replicate elaborate prototype chains, but feel free to try whatever crazy scheme you have in mind.
+- Objects are cloned superficially and probably won't replicate elaborate prototype chains, but feel free to try whatever wild ideas you have in mind.
 - It would be easy enough to track the iteration index and provide it as a third parameter to the callback function, but it seems more conceptually useful to *exactly match* the function signature of the array methods being imitated. If you need the iteration count as an integer in addition to the key as a string, just initialize a counter outside the scope of the callback function:
 
 ```javascript
